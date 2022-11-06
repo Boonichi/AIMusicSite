@@ -13,6 +13,27 @@ from collections import defaultdict
 
 import librosa
 
+def fcall(fun):
+    """
+    Convenience decorator used to measure the time spent while executing
+    the decorated function.
+    :param fun:
+    :return:
+    """
+    def wrapper(*args, **kwargs):
+
+        logging.info("[{}] ...".format(fun.__name__))
+
+        start_time = time.perf_counter()
+        res = fun(*args, **kwargs)
+        end_time = time.perf_counter()
+        runtime = end_time - start_time
+
+        logging.info("[{}] Done! {}s\n".format(fun.__name__, timedelta(seconds=runtime)))
+        return res
+
+    return wrapper
+    
 def set_random_seed(args):
     if "torch" in sys.modules:
         torch.manual_seed(args["random_seed"])
@@ -39,61 +60,27 @@ def setup_logging(args):
     logger = logging.getLogger()
     logger.setLevel(level[args["level"]])
 
-def load_raw_dataset(path: str):
-    label_path = os.path.join(path, "labels")
-    song_path = os.path.join(path, "songs")
-    Dataset = defaultdict()
-
-    for l_file in os.listdir(label_path):
-        path = os.path.join(label_path, l_file)
-        l_content = load_dataset(path)
-    
-    return l_content
-
-
-def load_dataset(path: str, raw_state = False):
+def load_dataset(path: str):
     
     logging.info("Load dataset {}!".format(path))
     path = str(path)
     
-    if raw_state == False:
-        if "json" in path:
-            with open(path, encoding = "utf-8") as f:
-                if ".jsonl" in path:
-                    data = [json.loads(line) for line in f]
-                elif ".json" in path:
-                    data = json.loads(f.read())
-        elif "pickle" in path:
-            with open(path, "rb") as f:
-                data = pickle.load(f)
-    elif raw_state == True:
-        load_raw_dataset(path)
+    if "json" in path:
+        with open(path, encoding = "utf-8") as f:
+            if ".jsonl" in path:
+                data = [json.loads(line) for line in f]
+            elif ".json" in path:
+                data = json.loads(f.read())
+    elif "pickle" in path:
+        with open(path, "rb") as f:
+            data = pickle.load(f)
+    elif "wav" in path:
+        data = librosa.load(path)
     else:
         raise NotImplementedError("Don't know how to load a dataset of this type")
 
     logging.info("Loaded {} records!".format(len(data)))
     return data
-
-def fcall(fun):
-    """
-    Convenience decorator used to measure the time spent while executing
-    the decorated function.
-    :param fun:
-    :return:
-    """
-    def wrapper(*args, **kwargs):
-
-        logging.info("[{}] ...".format(fun.__name__))
-
-        start_time = time.perf_counter()
-        res = fun(*args, **kwargs)
-        end_time = time.perf_counter()
-        runtime = end_time - start_time
-
-        logging.info("[{}] Done! {}s\n".format(fun.__name__, timedelta(seconds=runtime)))
-        return res
-
-    return wrapper
 
 def dump_dataset(path,data, verbose = True):
     if verbose:
@@ -125,3 +112,9 @@ def save_data(data, path):
     with open(path, 'wb') as f:
         pickle.dump(data, f)
     f.close()
+
+def ensure_path(path):
+    path = str(path)
+    if not os.path.exists(path):
+        os.makedirs(path, exist_ok=True)
+    return path

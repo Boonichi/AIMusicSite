@@ -7,8 +7,10 @@
         "level": "debug",
         "enable_formatter": false
     },
-    "raw_state" : false,
     "raw_dataset" : "./train/",
+    "storage" : {
+        "raw_data" : "./storage/raw_data.pickle"
+    },
     "prepare" :{
         "handler" : "MP3",
         "MP3" :{
