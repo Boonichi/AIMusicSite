@@ -6,7 +6,7 @@ from util import parser_config, setup_logging, set_random_seed
 from Dataset.utils import load_raw_dataset
 
 from models.utils import preprocess_dataset
-
+from models.utils import prepare_input, train, test
 
 from numba.core.errors import NumbaWarning
 import warnings
@@ -19,7 +19,9 @@ def main():
     parser = argparse.ArgumentParser()
     arguments = [
         ("rawloading", load_raw_dataset, "Loading Raw Dataset"),
-        ("preprocess", preprocess_dataset, "Preprocess samples - cleaning/filtering of invalid data")
+        ("preprocess", preprocess_dataset, "Preprocess samples - cleaning/filtering of invalid data"),
+        ("train", train, "Train currently selected mdoel"),
+        ("test", test, "Run available model on evaluation data")
     ]
     for arg, _, description in arguments:
         parser.add_argument('--{}'.format(arg), action ='store_true', help=description)
@@ -31,7 +33,6 @@ def main():
     set_random_seed(args)
     for arg, fun, _ in arguments:
         if hasattr(params, arg) and getattr(params, arg):
-            print(1)
             logging.info("Performing {} operation..".format(arg))
             fun(args)
 

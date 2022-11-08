@@ -7,7 +7,7 @@
         "level": "debug",
         "enable_formatter": false
     },
-    "raw_dataset" : "./train/",
+    "raw_dataset" : "./test/",
     "storage" : {
         "raw_data" : "./storage/raw_data.pickle"
     },
