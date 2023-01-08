@@ -45,9 +45,9 @@ class Lyrics_to_alignment():
         for word in lyric:
             word=word.replace(',','')
             word=word.replace('.','')            
-                #some special case of sign có thể đọc thành 2 âm tiết
+            #some special case of sign có thể đọc thành 2 âm tiết
             if("’" in temp):
-                    #some special case other we keep the same 
+                #some special case other we keep the same 
                 if("re" in temp):
                     temp=temp.replace("re","are")
                 if("s" in temp):

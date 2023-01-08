@@ -27,8 +27,8 @@ def latest_download_file(path):
 
 
 
-def check(line):
-    if ('ver' in line or 'verse' in line or 'chorus' in line or 'outro' in line or 'kết' in line or 'bài hát:' in line or 'song:' in line):
+def check_is_lyricline(line):
+    if ('ver' in line or 'verse' in line or 'chorus' in line or 'outro' in line or 'kết' in line or 'bài hát:' in line or 'song:' in line or '[' in line or ']' in line):
         return False
     return True
 
@@ -55,7 +55,7 @@ def processing_lyric(lyric):
     correct_lyric=[]
     flag=0
     for line in lyrics:
-        if (check(line)):
+        if (check_is_lyricline(line)):
             for element in line.split(' '):
                 if(element!=''):
                     if(len(element)==1):
