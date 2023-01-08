@@ -28,30 +28,25 @@ With IoU metric, the higher the better. The winner is the one achieving the high
 
 ## Datasets
 Dataset is available [here]()
+### Training data:
+1057 music segments from ~ 480 songs.
+
+Each segment is provided with an audio formatted as WAV file and a ground-truth JSON file which includes lyrics and aligned time frame of each single word as the above example.
+
+### Testing data:
+Public test: 264 music segments from ~ 120 songs without aligned lyric files.
+
+Private test: 464 music segments from ~ 200 songs without aligned lyric files.
 
 ### Methods Used
-* Source Code Representation (Abstract Syntax Tree, Control Flow Graph, Program Dependence Graph)
-* Attention Mechanism
-* Apriori Algorithm
-
-## Requirements
-### Code Preprocessing
-* The GNU Compiler Collection (g++)
-* [cppcheck](https://cppcheck.sourceforge.io)
-* [tokenizer](https://github.com/dspinellis/tokenizer)
-* [JOERN](https://joern.io)
-
-### Models
-* [Code2vec](https://code2vec.org)
-* [Mocktail](https://github.com/NobleMathews/mocktail-blend) - reimplemented
+1. Use [Spleeter](https://github.com/deezer/spleeter)/[Demucs](https://github.com/facebookresearch/demucs) to extract voice from music
+2. Resampling audio to 16k (The default sampling rate)
+3. Fine-Tuning the pretrained model [Wav2vec](https://huggingface.co/nguyenvulebinh/wav2vec2-base-vietnamese-250h) with CTC loss
+4. Force-alignment between audio and lyrics.
+5. Generate time-stamps of each word in lyrics
 
 ## Usage
-* The settings and model configuration parameters to our model are mentioned in [config.json](./main/config.json) 
 * Using arguments:
-    * ```--rawcreate``` : Create tags and raw dataset
-    * ```--preprocess``` : Transform the raw source code into Code Property Graph
-    * ```--split``` : Split the dataset into train/dev folds
-    * ```--prepare_input``` : Preparing input for train process
     * ```--train``` : Training
     * ```--test``` : Testing
 * For Example (Testing):
@@ -59,13 +54,9 @@ Dataset is available [here]()
     ```
     python main.py --test
     ```
-## Evaluation
-* Target: 28 algorithm labels (after EDA)
-* Code Label Result: 0.44 (F1 Score Micro)
+
 ## Dataset
-* The complete Dataset is available [here]
-## Weights
-* The weight after trainning [here]
-## Article [here](./article.docx)
+* The complete Dataset is available [here]()
+
 ## Contact
 * Feel free to contact me through pvhung1302@gmail.com

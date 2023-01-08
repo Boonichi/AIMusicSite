@@ -15,9 +15,6 @@ special_characters = {"ð" : "đ"}
 labels=("ẻ","6","ụ","í","3","ỹ","ý","ẩ","ở","ề","õ","7","ê","ứ","ỏ","v","ỷ","a","l","ự","q","ờ","j","ố","à","ỗ","n","é","ủ","у","ô","u","y","ằ","4","w","b","ệ","ễ","s","ì","ầ","ỵ","8","d","ể","|","r","ũ","c","ạ","9","ế","ù","ỡ","2","t","i","g","́ ","ử","̀ ","á","0","ậ","e","ộ","m","ẳ","ợ","ĩ","h","â","ú","ọ","ồ","ặ","f","ữ","ắ","ỳ","x","ó","ã","ổ","ị","̣ ","z","ả","đ","è","ừ","ò","ẵ","1","ơ","k","ẫ","p","ấ","ẽ","ỉ","ớ","ẹ","ă","o","ư","5","<","<pad>")
 dictionary = {c: i for i, c in enumerate(labels)}
 
-
-
-
 class Lyrics_to_alignment():
     def __init__(self, vocal_path, lyric,get_lyric_function=None):
         self.vocal_path         = vocal_path
@@ -30,6 +27,7 @@ class Lyrics_to_alignment():
     def denoise_data(self):
         data,_=run_denoiser(self.denoiser,self.vocal_path)
         return data
+
     def downsample(self, vocal, original_sr=44100, target_sr = 16000):
         lowSignal = librosa.resample(vocal, original_sr, target_sr)
         return lowSignal
