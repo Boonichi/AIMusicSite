@@ -41,6 +41,14 @@ class Lyrics_to_alignment():
         return self.get_lyric_function(self.lyric)
     
     def preprocessing(self,lyric):
+        
+        if not type(lyric) is list:
+            if self.get_lyric_function == None:
+                raise TypeError('lyric must be in list type')
+            else:
+                raise TypeError('get_lyric_function must return list type')
+            
+    
         lyrics=[]
         for word in lyric:
             word=word.replace(',','')
