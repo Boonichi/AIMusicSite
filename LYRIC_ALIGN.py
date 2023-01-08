@@ -19,12 +19,13 @@ dictionary = {c: i for i, c in enumerate(labels)}
 
 
 class Lyrics_to_alignment():
-    def __init__(self, vocal_path, lyric_path):
-        self.vocal_path     = vocal_path
-        self.lyric_path     = lyric_path
-        self.processor      = Wav2Vec2Processor.from_pretrained("nguyenvulebinh/wav2vec2-base-vietnamese-250h")
-        self.model          = Wav2Vec2ForCTC.from_pretrained("nguyenvulebinh/wav2vec2-base-vietnamese-250h")
-        self.denoiser       = get_denoiser()
+    def __init__(self, vocal_path, lyric,get_lyric_function=None):
+        self.vocal_path         = vocal_path
+        self.lyric              = lyric
+        self.processor          = Wav2Vec2Processor.from_pretrained("nguyenvulebinh/wav2vec2-base-vietnamese-250h")
+        self.model              = Wav2Vec2ForCTC.from_pretrained("nguyenvulebinh/wav2vec2-base-vietnamese-250h")
+        self.denoiser           = get_denoiser()
+        self.get_lyric_function = get_lyric_function
 
     def denoise_data(self):
         data,_=run_denoiser(self.denoiser,self.vocal_path)
@@ -34,45 +35,43 @@ class Lyrics_to_alignment():
         return lowSignal
     
     def get_lyric(self):
-        f=open(self.lyric_path,"rb")
-        lyric=json.load(f)
-    
-        lyrics = []
-        for value in lyric: 
-            for v in value["l"]:
-                temp=v["d"]
-                temp=temp.replace(',','')
-                temp=temp.replace('.','')
-                
-                #some special case of sign có thể đọc thành 2 âm tiết
-                if("’" in temp):
-                    #some special case other we keep the same 
-                    if("re" in temp):
-                        temp=temp.replace("re","are")
-                    if("s" in temp):
-                        temp=temp.replace("s","is")
-                    if("ll" in temp):
-                        temp=temp.replace("ll","will")
-                    temp=temp.replace("’","|")
-                if ("$" in temp):
-                    temp=temp.replace("$","|$")
-                    
-                if("%" in temp):
-                    temp=temp.replace('%',"|%")
-                    
-                if("@" in temp):
-                    temp=temp.replace("@","|@|")
-                
-                if(temp[-1]=="|"): 
-                    temp=temp[:-1]
-                
-                lyrics.append(temp)
-        lyrics = "|".join(lyrics).lower()
-        return lyrics
+        if(self.get_lyric_function==None):
+            return self.lyric
+        
+        return self.get_lyric_function(self.lyric)
     
     def preprocessing(self,lyric):
+        lyrics=[]
+        for word in lyric:
+            word=word.replace(',','')
+            word=word.replace('.','')            
+                #some special case of sign có thể đọc thành 2 âm tiết
+            if("’" in temp):
+                    #some special case other we keep the same 
+                if("re" in temp):
+                    temp=temp.replace("re","are")
+                if("s" in temp):
+                    temp=temp.replace("s","is")
+                if("ll" in temp):
+                    temp=temp.replace("ll","will")
+                temp=temp.replace("’","|")
+            if ("$" in temp):
+                temp=temp.replace("$","|$")
+                    
+            if("%" in temp):
+                temp=temp.replace('%',"|%")
+                    
+            if("@" in temp):
+                temp=temp.replace("@","|@|")
+                
+            if(temp[-1]=="|"): 
+                temp=temp[:-1]
+                
+            lyrics.append(temp)
+        lyrics = "|".join(lyrics).lower()            
+            
         res = ""
-        for e in lyric:
+        for e in lyrics:
             if (e in special_characters):
                 res += special_characters[e]
             elif (e == "|" or e.isalnum()):
