@@ -32,8 +32,16 @@ def check(line):
         return False
     return True
 
+
+def remove_accents(raw_name):
+    nfkd_form   = unicodedata.normalize('NFKD', raw_name)
+    only_ascii  = nfkd_form.encode('ASCII', 'ignore')
+    name        = only_ascii.decode('utf-8')
+    return str(name)
+
 def preprocessing_name(name):
-    name=name.replace(' ','+')
+    name    =remove_accents(name)
+    name    =name.replace(' ','+')
     return name
 
 
@@ -85,7 +93,7 @@ def take_lyric_song(name):
     
     path=latest_download_file(download_dic)
     # need to store the file and rename it
-    return lyric,path
+    return lyric,os.path.join(download_dic,path)
 
     
     
