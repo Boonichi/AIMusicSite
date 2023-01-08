@@ -7,16 +7,17 @@ import librosa
 import scipy
 import json
 import os
+import random
+import requests
+from time import sleep 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 from dataclasses import dataclass
 from demucs import pretrained
 from demucs.apply import apply_model
 from demucs.audio import convert_audio
-import requests
 from selenium import webdriver
-from time import sleep 
 from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver.common.by import By
-import random
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager

@@ -3,10 +3,21 @@ from .libs import*
 
 url='https://www.nhaccuatui.com/tim-kiem?q={}'
 download_dic='C:\Download'
-options=webdriver.ChromeOptions()
-prefs={"download.default_directory":"{}".format(download_dic)} #define download library
-options.add_experimental_option("prefs",prefs)
-driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
+
+chrome_options = Options()
+chrome_options.add_experimental_option("prefs", {
+  "download.default_directory": download_dic,
+  "download.prompt_for_download": False,
+})
+
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--log-level=3")
+driver = webdriver.Chrome(options=chrome_options)
+
+driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_dic}}
+command_result = driver.execute("send_command", params)
+
 
 def latest_download_file(path):
       os.chdir(path)
@@ -76,11 +87,5 @@ def take_lyric_song(name):
     # need to store the file and rename it
     return lyric,path
 
-
-
-lyric,path=take_lyric_song('co em')
-
-print(lyric)
-print(path)
     
     
