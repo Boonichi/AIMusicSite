@@ -32,15 +32,16 @@ def check_is_lyricline(line):
         return False
     return True
 
-
-def remove_accents(raw_name):
-    nfkd_form   = unicodedata.normalize('NFKD', raw_name)
-    only_ascii  = nfkd_form.encode('ASCII', 'ignore')
-    name        = only_ascii.decode('utf-8')
-    return str(name)
-
 def preprocessing_name(name):
-    name    =remove_accents(name)
+    name    =unidecode(name)
+    
+    names   =name.split(' ')
+    name    =''
+    for element in names:
+        if(element!=""):
+            name+=element+" "
+    
+    name    =name[:-1]
     name    =name.replace(' ','+')
     return name
 
