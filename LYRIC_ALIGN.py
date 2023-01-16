@@ -21,15 +21,15 @@ class Lyrics_to_alignment():
         self.lyric              = lyric
         self.processor          = Wav2Vec2Processor.from_pretrained("nguyenvulebinh/wav2vec2-base-vietnamese-250h")
         self.model              = Wav2Vec2ForCTC.from_pretrained("nguyenvulebinh/wav2vec2-base-vietnamese-250h")
-        self.denoiser           = get_denoiser()
+        self.denoiser           = get_denoiser(device)
         self.get_lyric_function = get_lyric_function
 
     def denoise_data(self):
         data,_=run_denoiser(self.denoiser,self.vocal_path)
         return data
 
-    def downsample(self, vocal, original_sr=44100, target_sr = 16000):
-        lowSignal = librosa.resample(vocal, original_sr, target_sr)
+    def downsample(self, vocal, original_sr=44100, targ_sr = 16000):
+        lowSignal = librosa.resample(vocal, orig_sr=original_sr, target_sr=targ_sr)
         return lowSignal
     
     def get_lyric(self):
@@ -52,28 +52,28 @@ class Lyrics_to_alignment():
             word=word.replace(',','')
             word=word.replace('.','')            
             #some special case of sign có thể đọc thành 2 âm tiết
-            if("’" in temp):
+            if("’" in word):
                 #some special case other we keep the same 
-                if("re" in temp):
-                    temp=temp.replace("re","are")
-                if("s" in temp):
-                    temp=temp.replace("s","is")
-                if("ll" in temp):
-                    temp=temp.replace("ll","will")
-                temp=temp.replace("’","|")
-            if ("$" in temp):
-                temp=temp.replace("$","|$")
+                if("re" in word):
+                    word=word.replace("re","are")
+                if("s" in word):
+                    word=word.replace("s","is")
+                if("ll" in word):
+                    word=word.replace("ll","will")
+                word=word.replace("’","|")
+            if ("$" in word):
+                word=word.replace("$","|$")
                     
-            if("%" in temp):
-                temp=temp.replace('%',"|%")
+            if("%" in word):
+                word=word.replace('%',"|%")
                     
-            if("@" in temp):
-                temp=temp.replace("@","|@|")
+            if("@" in word):
+                word=word.replace("@","|@|")
                 
-            if(temp[-1]=="|"): 
-                temp=temp[:-1]
+            if(word[-1]=="|"): 
+                word=word[:-1]
                 
-            lyrics.append(temp)
+            lyrics.append(word)
         lyrics = "|".join(lyrics).lower()            
             
         res = ""
