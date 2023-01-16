@@ -12,7 +12,7 @@ def get_denoiser(device="cuda"):
 def run_denoiser(separator, path):
     mix, sr = torchaudio.load(str(path))
     src_rate = separator.samplerate  # 44100
-    mix = mix.cuda()
+    mix = mix.to(device)  # instead of cuda because some computer can't use cuda
     ref = mix.mean(dim=0)  # mono mixture
     mix = (mix - ref.mean()) / ref.std()
     mix = convert_audio(mix, src_rate, separator.samplerate, separator.audio_channels)

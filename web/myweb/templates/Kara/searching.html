@@ -1,0 +1,23 @@
+{% load static %}
+<html>
+<head>
+<link rel="stylesheet" href="{% static 'Kara/searching.css' %}">
+</head>
+<body>
+  
+    <form action="." method='POST'>{% csrf_token %}
+        <div class="wrap">
+            <div class="search">
+                <input type="text" name="song_name" class="input" placeholder="Type something here....">
+                <button type="submit">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span> Search
+                </button>
+              
+            </div>
+        </div>
+    </form>
+</body>
+</html>
