@@ -1,4 +1,4 @@
-from ...libs import*
+from .libs import*
 
 
 url='https://www.nhaccuatui.com/tim-kiem?q={}'
