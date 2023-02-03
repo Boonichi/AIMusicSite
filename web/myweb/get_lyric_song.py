@@ -78,7 +78,7 @@ def take_lyric_song(name):
     sleep(random.randint(3,5))
     #get lyric
     lyric=driver.find_element(By.CSS_SELECTOR,'.pd_lyric').text
-    lyric=processing_lyric(lyric)
+    lyric,number=processing_lyric(lyric)
 
     author=driver.find_element(By.CSS_SELECTOR,'.name_singer').get_attribute('innerHTML')
     name_song=driver.find_element(By.CSS_SELECTOR,'.name_title h1').get_attribute('innerHTML')
@@ -94,7 +94,7 @@ def take_lyric_song(name):
     
     path=latest_download_file(download_dic)
     # need to store the file and rename it
-    return lyric,path,name_song,author
+    return lyric,number,path,name_song,author
 
     
     
