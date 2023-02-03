@@ -62,6 +62,7 @@ def processing_lyric(lyric):
             for element in line.split(' '):
                 if(element!=''):
                     correct_lyric.append(element)
+                    count +=1
             number_sentence_word_per_sentence[index]['count']=count
             index +=1
 
@@ -85,7 +86,7 @@ def take_lyric_song(name):
     
     download_button=driver.find_element(By.CSS_SELECTOR,'#btnDownloadBox')
     download_button.click()
-    sleep(10)
+    sleep(random.randint(6,7))
     button_128KB=driver.find_element(By.CSS_SELECTOR,'#downloadBasic')
     button_128KB.click()
     sleep(10) # to downloading
