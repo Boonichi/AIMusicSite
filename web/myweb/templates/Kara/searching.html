@@ -1,11 +1,31 @@
 {% load static %}
 <html>
 <head>
-<link rel="stylesheet" href="{% static 'Kara/searching.css' %}">
+<link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
 </head>
 <body>
-  
-    <form action="." method='POST'>{% csrf_token %}
+    <nav>
+        <div class="nav-bg"></div>
+        <ul>
+          <li><a href="">Link</a></li>
+          <li><a href="">Link</a></li>
+          <li><a href="">Link</a></li>
+          <li><a href="">Link</a></li>
+        </ul>
+      </nav>
+      <div class="hero">
+        <h1>Lyric Alignment</h1>
+      </div>
+      <div class="content-wrapper">
+        <h1>Some Things About Process</h1>
+        <p>Cray marfa artisan mlkshk tote bag. Freegan man braid master cleanse, pork belly retro artisan man bun hammock cronut quinoa roof party. Pop-up cardigan poutine meditation, affogato stumptown wolf fashion axe pug. Listicle paleo seitan keytar, twee kinfolk salvia meggings cold-pressed retro fingerstache typewriter organic cred. Tacos church-key gochujang, swag ugh squid put a bird on it VHS fingerstache ennui cardigan craft beer. Taxidermy beard you probably haven't heard of them four dollar toast PBR&B. Poutine lo-fi blue bottle, twee hammock sriracha godard.</p>
+        
+        <p>Cardigan DIY dreamcatcher stumptown. Brunch yuccie swag, selfies leggings echo park quinoa cred squid cray typewriter. Tofu crucifix small batch typewriter irony, blog iPhone cold-pressed tousled pork belly polaroid. Direct trade heirloom deep v chicharrones kale chips. 8-bit viral kale chips food truck chillwave pork belly, art party cornhole hoodie banjo freegan. Tacos vice selfies, wolf tumblr vinyl affogato leggings sartorial forage plaid deep v cronut schlitz you probably haven't heard of them. Meditation normcore fap, pork belly 3 wolf moon pabst next level tacos gochujang franzen.</p>
+        
+        <p>Ethical keytar slow-carb forage before they sold out meggings. Kombucha church-key kickstarter, pork belly scenester beard ugh ennui ramps gochujang pop-up chambray retro tacos messenger bag. Lo-fi pour-over tote bag migas brunch deep v shoreditch slow-carb before they sold out selfies. Meh hashtag kombucha ennui venmo. Lo-fi seitan normcore hoodie biodiesel celiac. Pickled master cleanse kitsch tofu, freegan vinyl letterpress. Tote bag banjo 90's, brunch XOXO retro cred seitan venmo master cleanse.</p>
+      </div>
+      <form action="." method='POST'>{% csrf_token %}
         <div class="wrap">
             <div class="search">
                 <input type="text" name="song_name" class="input" placeholder="Type something here....">
@@ -19,5 +39,34 @@
             </div>
         </div>
     </form>
+
+
+    <section class='footer-section'>
+        <div class='content'>
+            <div class='infomation'>
+                <h2>Contact us?</h2>
+                <div class="social">
+                    <a href="" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="" target="_blank"><i class="far fa-envelope"></i></a>
+                    <a href=""><i class="fab fa-github"></i></a>
+                    <a href=""><i class="fas fa-phone"></i></a>
+                </div>
+            </div>
+            <div class='us'>
+                <h2><a href=''>About us?</a></h2>
+                <p>A little things about us.</P>
+            </div>
+            <div class='image'>
+                <i class="fab fa-wolf-pack-battalion"></i>
+            </div>
+        </div>
+
+    </section>
+
+
+
 </body>
+<link rel="stylesheet" href="{% static 'Kara/css/searching.css' %}">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="{% static 'Kara/js/searching.js' %}"></script> 
 </html>

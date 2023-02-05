@@ -2,7 +2,7 @@ from .libs import*
 
 
 url='https://www.nhaccuatui.com/tim-kiem?q={}'
-download_dic='C:\Download'
+download_dic=os.path.join(os.getcwd(),'SONGS')
 
 chrome_options = Options()
 chrome_options.add_experimental_option("prefs", {
@@ -20,15 +20,15 @@ command_result = driver.execute("send_command", params)
 
 
 def latest_download_file(path):
-      os.chdir(path)
-      files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
+      list_dir=[os.path.join(path,file_name) for file_name in os.listdir(path)]
+      files = sorted(list_dir, key=os.path.getmtime)
       newest = files[-1]
       return newest
 
 
 
 def check_is_lyricline(line):
-    if ('ver' in line or 'verse' in line or 'chorus' in line or 'outro' in line or 'kết' in line or 'bài hát:' in line or 'song:' in line or '[' in line or ']' in line):
+    if ('ver' in line or 'verse' in line or 'chorus' in line or 'outro' in line or 'kết' in line or 'bài hát:' in line or 'song:' in line or '[' in line or ']' in line or len(line)==0):
         return False
     return True
 
@@ -47,28 +47,26 @@ def preprocessing_name(name):
 
 
 def processing_lyric(lyric):
-    lyric=lyric.lower()
     lyric=lyric.replace(','," ")
     lyric=lyric.replace('.'," ")
     lyric=lyric.replace('/'," ")
     lyric=lyric.replace('?'," ")
     lyrics=lyric.split('\n')
     correct_lyric=[]
-    flag=0
+    number_sentence_word_per_sentence=[]
+    index=0
     for line in lyrics:
-        if (check_is_lyricline(line)):
+        if (check_is_lyricline(line.lower())):
+            number_sentence_word_per_sentence.append({})
+            count=0
             for element in line.split(' '):
                 if(element!=''):
-                    if(len(element)==1):
-                        if(flag==1):
-                            correct_lyric[-1]=correct_lyric[-1]+element
-                        else:
-                            correct_lyric.append(element)
-                            flag=1
-                    else:
-                        correct_lyric.append(element)
-                        flag=0
-    return correct_lyric
+                    correct_lyric.append(element)
+                    count +=1
+            number_sentence_word_per_sentence[index]['count']=count
+            index +=1
+
+    return correct_lyric,number_sentence_word_per_sentence
 
 def take_lyric_song(name):
     driver.get(url.format(preprocessing_name(name))) 
@@ -81,11 +79,14 @@ def take_lyric_song(name):
     sleep(random.randint(3,5))
     #get lyric
     lyric=driver.find_element(By.CSS_SELECTOR,'.pd_lyric').text
-    lyric=processing_lyric(lyric)
+    lyric,number=processing_lyric(lyric)
+
+    author=driver.find_element(By.CSS_SELECTOR,'.name_singer').get_attribute('innerHTML')
+    name_song=driver.find_element(By.CSS_SELECTOR,'.name_title h1').get_attribute('innerHTML')
     
     download_button=driver.find_element(By.CSS_SELECTOR,'#btnDownloadBox')
     download_button.click()
-    sleep(10)
+    sleep(random.randint(6,7))
     button_128KB=driver.find_element(By.CSS_SELECTOR,'#downloadBasic')
     button_128KB.click()
     sleep(10) # to downloading
@@ -94,7 +95,7 @@ def take_lyric_song(name):
     
     path=latest_download_file(download_dic)
     # need to store the file and rename it
-    return lyric,os.path.join(download_dic,path)
+    return lyric,number,path,name_song,author
 
     
     
