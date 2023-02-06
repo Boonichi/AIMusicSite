@@ -26,14 +26,14 @@ def convert_to_json_form(word_segments,original_lyrics,number_sentence_word_per_
     for w in original_lyrics:
         result[index_sentence]['w'].append({})
         if(not check_special_sign(w)): 
-            result[index_sentence]['w'][count_word]['s']=convert_time(word_segments[index].start,trellis_len,len_signal,16000)
+            result[index_sentence]['w'][count_word]['s']=0#convert_time(word_segments[index].start,trellis_len,len_signal,16000)
             result[index_sentence]['w'][count_word]['d']=w
-            result[index_sentence]['w'][count_word]['e']=convert_time(word_segments[index].end,trellis_len,len_signal,16000)
+            result[index_sentence]['w'][count_word]['e']=0#convert_time(word_segments[index].end,trellis_len,len_signal,16000)
             index +=1
         else: #some special situation
-            result[index_sentence]['w'][count_word]['s']=convert_time(word_segments[index].start,trellis_len,len_signal,16000)
+            result[index_sentence]['w'][count_word]['s']=0#convert_time(word_segments[index].start,trellis_len,len_signal,16000)
             result[index_sentence]['w'][count_word]['d']=w
-            result[index_sentence]['w'][count_word]['e']=convert_time(word_segments[index+1].end,trellis_len,len_signal,16000)
+            result[index_sentence]['w'][count_word]['e']=0#convert_time(word_segments[index+1].end,trellis_len,len_signal,16000)
             index +=2
         count_word+=1
         if(count_word==number_sentence_word_per_sentence[index_sentence]['count']):

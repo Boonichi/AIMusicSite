@@ -96,7 +96,6 @@ async function main(){
       });
       res= await response.json()
       result=JSON.parse(res.data)
-      console.log(result)
       processing(result)
       
   }catch(e){
