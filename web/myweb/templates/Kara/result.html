@@ -6,8 +6,8 @@
 </head>
 <body>
 
-    <div class="floating-icon"><a href="https://jewel998.github.io/playlist" style="color:white"><i class="fa fa-github"></i></a></div>
-    <div class="floating-icon"><a href="https://codepen.io/jewel998" style="color:white"><i class="fa fa-codepen"></i></a></div>
+    <div class="floating-icon"><a href="" style="color:white"><i class="fab fa-github"></i></a></div>
+    <div class="floating-icon"><a href="" style="color:white"><i class="fab fa-codepen"></i></a></div>
     <div id="music-player">
             <img id="album-art"/>
             <div id="top-bar">
@@ -19,22 +19,22 @@
               <div id="lyrics-content">
               </div>
             </div>
-            <audio id="audioFile" preload="true">
+            <audio id="audioFile" preload="true" src="{% static {{URL}} type="audio/mpeg" %}">
             </audio>
             <div id="player">
               <div id="bar">
                 <div id="currentTime"></div>
                 <div id="progress-bar">
-                  <div id="progress"><i id="progressButton" class="fa fa-circle"></i></div>
+                  <div id="progress"><i id="progressButton" class="fas fa-circle"></i></div>
                 </div>
                 <div id="totalTime"></div>
               </div>
               <div id="menu">
-                <button id="repeat" style="color:grey"><i class="fa fa-repeat"></i></button>
-                <button id="prev"><i class="fa fa-step-backward"></i></button>
+                <button id="repeat" ><i class="fas fa-repeat"></i></button>
+                <button id="prev"><i class="fas fa-backward"></i></button>
                 <button id="play"><i class="fa fa-play"></i></button>
-                <button id="next"><i class="fa fa-step-forward"></i></button>
-                <button id="shuffle" style="color:grey"><i class="fa fa-random"></i></button>
+                <button id="next"><i class="fas fa-forward"></i></button>
+                <button id="shuffle"><i class="fa fa-random"></i></button>
               </div>
             </div>
             <div id="playlist">
