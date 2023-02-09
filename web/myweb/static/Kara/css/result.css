@@ -57,6 +57,7 @@
     opacity: 1;
     font-size: 250%;
     transform: translateY(25%);
+    color: green;
   }
   #lyrics .current + h2{
     opacity: 0.5;
