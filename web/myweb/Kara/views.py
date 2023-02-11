@@ -29,8 +29,8 @@ class waiting_view(View):
         lyric,number,path_song,song_name,author_name=take_lyric_song(song_search)
         word,treils_length,vocal=Lyrics_to_alignment(path_song,lyric).run()
 
-        output_file=convert_to_json_form(word,lyric,number,converto_time,treils_length,len(vocal),'static/info/result.json')
-        # output_file=convert_to_json_form(0,lyric,number,converto_time,0,0,'static/info/result.json')
+        output_file=convert_to_json_form(word,lyric,number,converto_time,treils_length,len(vocal),'static/info','result.json')
+        #output_file=convert_to_json_form(0,lyric,number,converto_time,0,0)
         info['lyrics']=output_file
         info['author_name']=author_name
         info['song_name']=song_name
@@ -44,7 +44,12 @@ class waiting_view(View):
     
 class result_view(View):
     def get(self,request,*args, **kwargs):
-        return render(request,'Kara/result.html')
+        json_data = open(os.path.join(os.getcwd(),'static/info/info_file.json'),'rb')
+        data1=json.load(json_data)
+        json_data.close()
+        path=data1['audio'].split(os.path.sep)
+        path=os.path.join(path[-2],path[-1])
+        return render(request,'Kara/result.html',{'path':path})
     
 class API_JSON(View):
     def get(self,request):
