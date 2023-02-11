@@ -19,7 +19,7 @@
               <div id="lyrics-content">
               </div>
             </div>
-            <audio id="audioFile" preload="true" src="{% static {{URL}} type="audio/mpeg" %}">
+            <audio id="audioFile" preload="true" src="{% static path %}" type="audio/mpeg">
             </audio>
             <div id="player">
               <div id="bar">
@@ -30,7 +30,7 @@
                 <div id="totalTime"></div>
               </div>
               <div id="menu">
-                <button id="repeat" ><i class="fas fa-repeat"></i></button>
+                <button id="repeat" ><i class="fa-solid fa-repeat"></i></i></button>
                 <button id="prev"><i class="fas fa-backward"></i></button>
                 <button id="play"><i class="fa fa-play"></i></button>
                 <button id="next"><i class="fas fa-forward"></i></button>
