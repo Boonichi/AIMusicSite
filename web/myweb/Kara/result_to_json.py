@@ -9,7 +9,7 @@ def converto_time(position,trellis_len,len_signal,sr,target_sr=1000):
     return int((position/trellis_len)*(len_signal/sr)*(target_sr))
 
 
-def convert_to_json_form(word_segments,original_lyrics,number_sentence_word_per_sentence,convert_time,trellis_len,len_signal,output_file='static/result.json'):
+def convert_to_json_form(word_segments,original_lyrics,number_sentence_word_per_sentence,convert_time,trellis_len,len_signal,output_folder='static/info',output_file='result.json'):
     result=[]
     index=0
     for order,sentence in enumerate(number_sentence_word_per_sentence):
@@ -41,8 +41,11 @@ def convert_to_json_form(word_segments,original_lyrics,number_sentence_word_per_
             result[index_sentence]['e']=result[index_sentence]['w'][-1]['e']
             index_sentence +=1
             count_word=0
-
-    path=os.path.join(os.getcwd(),output_file)
+            
+    folder=os.path.join(os.getcwd(),output_folder)
+    path=os.path.join(os.getcwd(),output_folder,output_file)
+    if(not os.path.exists(folder)):
+        os.makedirs(folder)
     
     with open(path, "w",encoding='utf-8') as outfile:
         json.dump(result, outfile,ensure_ascii=False)

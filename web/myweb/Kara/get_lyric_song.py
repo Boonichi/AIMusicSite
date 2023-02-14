@@ -2,7 +2,7 @@ from .libs import*
 
 
 url='https://www.nhaccuatui.com/tim-kiem?q={}'
-download_dic=os.path.join(os.getcwd(),'SONGS')
+download_dic=os.path.join(os.getcwd(),'static\SONGS')
 
 chrome_options = Options()
 chrome_options.add_experimental_option("prefs", {
@@ -29,6 +29,9 @@ def latest_download_file(path):
 
 def check_is_lyricline(line):
     if ('ver' in line or 'verse' in line or 'chorus' in line or 'outro' in line or 'kết' in line or 'bài hát:' in line or 'song:' in line or '[' in line or ']' in line or len(line)==0):
+        return False
+    element = line.split(':')
+    if ('' in element):
         return False
     return True
 
@@ -69,6 +72,10 @@ def processing_lyric(lyric):
     return correct_lyric,number_sentence_word_per_sentence
 
 def take_lyric_song(name):
+    
+    if(not os.path.exists(download_dic)):
+        os.makedirs(download_dic)
+    
     driver.get(url.format(preprocessing_name(name))) 
     sleep(random.randint(3,5))
     
@@ -89,7 +96,7 @@ def take_lyric_song(name):
     sleep(random.randint(6,7))
     button_128KB=driver.find_element(By.CSS_SELECTOR,'#downloadBasic')
     button_128KB.click()
-    sleep(10) # to downloading
+    sleep(15) # to downloading
     
     driver.quit()
     
