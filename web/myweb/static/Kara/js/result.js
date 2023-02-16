@@ -11,7 +11,7 @@ var safeKill = 0;
 var counter = 0;
 var time = 0;
 var previousTime;
-
+var repeat_time=0;
 function processTime(a) {
   var b = parseInt(a / 60000);
   var c = parseInt((a % 60000) / 1000);
@@ -86,16 +86,25 @@ $("#progressButton").mouseup(function () {
 });
 
 function playSong(){
-  if (play == 0) {
+  if(repeat_time ==0){
+    if (play == 0) {
+      play = 1;
+      audio.play();
+      $("#menu button#play i").removeClass("fa-play");
+      $("#menu button#play i").addClass("fa-pause");
+    } else {
+      play = 0;
+      audio.pause();
+      $("#menu button#play i").removeClass("fa-pause");
+      $("#menu button#play i").addClass("fa-play");
+    }
+  }else{
+    reset();
     play = 1;
+    repeat_time=0;
     audio.play();
-    $("#menu button#play i").removeClass("fa-play");
+    $("#menu button#play i").removeClass("fa-reply");
     $("#menu button#play i").addClass("fa-pause");
-  } else {
-    play = 0;
-    audio.pause();
-    $("#menu button#play i").removeClass("fa-pause");
-    $("#menu button#play i").addClass("fa-play");
   }
 };
 
@@ -132,19 +141,13 @@ function updateTimer(data) {
     totalTime = parseInt(audio.duration * 1000);
     processing(data);
   }
+
   //for the end of the song
   if (time >= totalTime) {
-    if (play == 0) return;
-    playSong();
-    if (songRepeat == 1) {
-      reset();
-      playSong();
-      return;
-    } else {
-      nextSong();
-      playSong();
-    }
-    return;
+    $("#menu button#play i").removeClass("fa-pause");
+    $("#menu button#play i").addClass("fa-reply");
+    repeat_time=1;
+    audio.pause();
   }
   //update timer
   if (play == 1) {
@@ -161,12 +164,6 @@ function updateTimer(data) {
   } else {
     time = parseInt(audio.currentTime * 1000);
     // if (time > 100) time = time - 100;
-    if (play == 1) {
-      audio.pause();
-      if (audio.readyState == 4) {
-        audio.play();
-      }
-    }
   }
   safeKill = 0;
   while (true) {
@@ -280,3 +277,4 @@ button.addEventListener('click',event => {
 stopTimer = setInterval(function () {
   updateTimer(result);
 }, 1000);
+
