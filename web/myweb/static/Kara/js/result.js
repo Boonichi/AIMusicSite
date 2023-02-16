@@ -3,8 +3,9 @@ const url = 'http://127.0.0.1:8000/Kara/api/getjson/'
 var play=0;
 var audio = document.getElementById("audioFile");
 var button =document.getElementById('play');
+var V = audio.volume;
 var result;
-var totalTime = 0;
+var totalTime = parseInt(audio.duration * 1000);
 var timeList = [];
 var safeKill = 0;
 var counter = 0;
@@ -159,7 +160,7 @@ function updateTimer(data) {
     $("#progress").css("width", percent + "%");
   } else {
     time = parseInt(audio.currentTime * 1000);
-    if (time > 100) time = time - 100;
+    // if (time > 100) time = time - 100;
     if (play == 1) {
       audio.pause();
       if (audio.readyState == 4) {
@@ -246,6 +247,31 @@ async function main(){
 };
 
 main()
+
+$("#up").on("click",function(){
+    if(V<1){
+        V +=0.1;
+        audio.volume=V;
+    }
+});
+$("#down").on("click",function(){
+    if(V>0){
+        V -=0.1;
+        audio.volume=V;
+    }
+});
+$("#next").on("click",function(){
+    if(time < totalTime){
+        time += 5000;
+        audio.currentTime = parseInt(time/1000)
+    }
+});
+$("#prev").on("click",function(){
+    if(time>5100){
+        time -= 5000;
+        audio.currentTime = parseInt(time/1000)
+    }
+});
 
 button.addEventListener('click',event => {
   playSong();
