@@ -16,16 +16,17 @@ labels=("ẻ","6","ụ","í","3","ỹ","ý","ẩ","ở","ề","õ","7","ê","ứ
 dictionary = {c: i for i, c in enumerate(labels)}
 
 class Lyrics_to_alignment():
-    def __init__(self, vocal_path, lyric,get_lyric_function=None):
+    def __init__(self, vocal_path, lyric,sr=None,get_lyric_function=None,get_vocal_function=None):
         self.vocal_path         = vocal_path
         self.lyric              = lyric
+        self.sr                 = sr
         self.processor          = Wav2Vec2Processor.from_pretrained("nguyenvulebinh/wav2vec2-base-vietnamese-250h")
         self.model              = Wav2Vec2ForCTC.from_pretrained("nguyenvulebinh/wav2vec2-base-vietnamese-250h")
         self.denoiser           = get_denoiser(device)
         self.get_lyric_function = get_lyric_function
-
+        self.get_vocal_function = get_vocal_function
     def denoise_data(self):
-        data,_=run_denoiser(self.denoiser,self.vocal_path)
+        data,_=run_denoiser(self.denoiser,self.vocal_path,self.sr,self.get_vocal_function)
         return data
 
     def downsample(self, vocal, original_sr=44100, targ_sr = 16000):

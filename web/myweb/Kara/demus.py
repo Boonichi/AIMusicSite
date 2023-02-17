@@ -9,8 +9,26 @@ def get_denoiser(device="cuda"):
     return separator
 
 
-def run_denoiser(separator, path):
-    mix, sr = torchaudio.load(str(path))
+
+
+def run_denoiser(separator, vocal,sample_rate=None,get_vocal_function=None):
+    global mix,sr
+    
+    if(get_vocal_function!=None):
+        mix,sr=get_vocal_function(vocal)
+    else:
+        mix=vocal
+        sr=sample_rate
+            
+    if((type(mix)==numpy.ndarray or type(mix)==torch.Tensor)):
+        if(type(mix)==numpy.ndarray):
+            mix=torch.from_numpy(mix)
+    else:
+        if(get_vocal_function == None):
+            raise TypeError('get_vocal_function must return numpy.ndarry or torch.Tensor')
+        else:
+            raise TypeError('vocal must be in numpy.ndarray or torch Tensor type')    
+    
     src_rate = separator.samplerate  # 44100
     mix = mix.to(device)  # instead of cuda because some computer can't use cuda
     ref = mix.mean(dim=0)  # mono mixture
