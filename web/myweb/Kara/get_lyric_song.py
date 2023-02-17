@@ -19,6 +19,10 @@ params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'do
 command_result = driver.execute("send_command", params)
 
 
+def get_vocal(vocal):
+    mix,sr=librosa.load(vocal)
+    return mix,sr
+
 def latest_download_file(path):
       list_dir=[os.path.join(path,file_name) for file_name in os.listdir(path)]
       files = sorted(list_dir, key=os.path.getmtime)

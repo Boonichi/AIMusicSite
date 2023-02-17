@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.http import JsonResponse
 
 from .LYRIC_ALIGN import Lyrics_to_alignment
-from .get_lyric_song import take_lyric_song
+from .get_lyric_song import take_lyric_song,get_vocal
 from .result_to_json import convert_to_json_form,converto_time
 from .libs import os,json
 
@@ -27,7 +27,7 @@ class waiting_view(View):
     def post(self,request,*args, **kwargs):
         info={}
         lyric,number,path_song,song_name,author_name=take_lyric_song(song_search)
-        word,treils_length,vocal=Lyrics_to_alignment(path_song,lyric).run()
+        word,treils_length,vocal=Lyrics_to_alignment(path_song,lyric,get_vocal_function=get_vocal).run()
 
         output_file=convert_to_json_form(word,lyric,number,converto_time,treils_length,len(vocal),'static/info','result.json')
         #output_file=convert_to_json_form(0,lyric,number,converto_time,0,0)
