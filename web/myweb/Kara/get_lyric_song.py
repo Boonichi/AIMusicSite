@@ -23,6 +23,9 @@ def get_vocal(vocal):
     mix,sr=librosa.load(vocal)
     return mix,sr
 
+def get_lyric(lyric):
+    pass
+
 def latest_download_file(path):
       list_dir=[os.path.join(path,file_name) for file_name in os.listdir(path)]
       files = sorted(list_dir, key=os.path.getmtime)
