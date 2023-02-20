@@ -27,17 +27,32 @@
       
         <p>This is just for demo model and we will continue develop it in future so hope you enjoys it.</p>
     </div>
-      <form action="." method='POST'>{% csrf_token %}
+      <form action="." method='POST' enctype='multipart/form-data'>{% csrf_token %}
         <div class="wrap">
             <div class="search">
-                <input type="text" name="song_name" class="input" placeholder="Type something here....">
-                <button type="submit">
+                <input type="text" name="song_name" class="input" placeholder="Type something here...."> </br>
+                <button type="submit" value='text'>
                         <span></span>
                         <span></span>
                         <span></span>
                         <span></span> Search
                 </button>
-              
+            </div>
+        </div>
+    </form>
+
+    <form action="." method='POST' enctype='multipart/form-data'>{% csrf_token %}
+        <div class="wrap">
+            <div class="search">
+                <p>{{form.wav_file}}</p>
+                <p>{{form.txt_file}}</p>
+                <button type="submit" >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span> UPLOAD
+                </button>
+
             </div>
         </div>
     </form>
