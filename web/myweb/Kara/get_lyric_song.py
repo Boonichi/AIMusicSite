@@ -2,12 +2,15 @@ from .libs import*
 
 
 url='https://www.nhaccuatui.com/tim-kiem?q={}'
-download_dic=os.path.join(os.getcwd(),'static\SONGS')
+download_dic=os.path.join(os.getcwd(),'media','vocal')
 
 chrome_options = Options()
 chrome_options.add_experimental_option("prefs", {
-  "download.default_directory": download_dic,
+  "download.default_directory": 'D:\\VSC\\Machinelearning\\PROCESSES\\2\\AIMusicSite\\web\\myweb\\media\\vocal',
   "download.prompt_for_download": False,
+  "download.directory_upgrade": True,
+  "safebrowsing_for_trusted_sources_enabled": False,
+  "safebrowsing.enabled": True
 })
 
 chrome_options.add_argument("--headless")
@@ -20,11 +23,26 @@ command_result = driver.execute("send_command", params)
 
 
 def get_vocal(vocal):
-    mix,sr=librosa.load(vocal)
+    mix, sr = torchaudio.load(str(vocal))
     return mix,sr
 
 def get_lyric(lyric):
-    pass
+    file=open(lyric,'r+',encoding="utf8")
+    data=file.readlines()
+    file.close()
+    correct_lyric=[]
+    number_sentence_word_per_sentence=[]
+    index=0
+    for line in data:
+        line=line.replace('\n','')
+        number_sentence_word_per_sentence.append({})
+        count=0
+        for element in line.split(' '):
+            correct_lyric.append(element)
+            count += 1
+        number_sentence_word_per_sentence[index]['count']=count
+        index += 1
+    return correct_lyric,number_sentence_word_per_sentence        
 
 def latest_download_file(path):
       list_dir=[os.path.join(path,file_name) for file_name in os.listdir(path)]
