@@ -16,7 +16,7 @@ labels=("ẻ","6","ụ","í","3","ỹ","ý","ẩ","ở","ề","õ","7","ê","ứ
 dictionary = {c: i for i, c in enumerate(labels)}
 
 class Lyrics_to_alignment():
-    def __init__(self, vocal_path, lyric,sr=None,get_lyric_function=None,get_vocal_function=None):
+    def __init__(self, vocal_path, lyric,number_per_sentence,sr=None,get_lyric_function=None,get_vocal_function=None):
         self.vocal_path         = vocal_path
         self.lyric              = lyric
         self.sr                 = sr
@@ -25,6 +25,7 @@ class Lyrics_to_alignment():
         self.denoiser           = get_denoiser(device)
         self.get_lyric_function = get_lyric_function
         self.get_vocal_function = get_vocal_function
+        self.number_per_sentence= number_per_sentence
     def denoise_data(self):
         data,_=run_denoiser(self.denoiser,self.vocal_path,self.sr,self.get_vocal_function)
         return data
@@ -35,7 +36,7 @@ class Lyrics_to_alignment():
     
     def get_lyric(self):
         if(self.get_lyric_function==None):
-            return self.lyric
+            return self.lyric,self.number_per_sentence
         
         return self.get_lyric_function(self.lyric)
     
@@ -95,17 +96,18 @@ class Lyrics_to_alignment():
         return emission
     
     def run(self):
-        vocal       = self.denoise_data() 
-        vocal       = self.downsample(vocal)
-        lyric       = self.get_lyric()
-        lyric       = self.preprocessing(lyric)
-        emission    = self.Wav2Vec(vocal)
-        tokens      = [dictionary[c] for c in lyric]
-        trellis     = get_trellis(emission, tokens)
-        path        = backtrack(trellis,emission, tokens)
-        segments    = merge_repeats(path, lyric)
-        words       = merge_words(segments)
-        return words, trellis.shape[0],vocal
+        vocal              = self.denoise_data() 
+        vocal              = self.downsample(vocal)
+        self.lyric,number  = self.get_lyric()
+        lyric              = self.preprocessing(self.lyric)
+        emission           = self.Wav2Vec(vocal)
+        tokens             = [dictionary[c] for c in lyric]
+        trellis            = get_trellis(emission, tokens)
+        path               = backtrack(trellis,emission, tokens)
+        segments           = merge_repeats(path, lyric)
+        words              = merge_words(segments)
+        return words,trellis.shape[0],vocal,number,self.lyric
+    
         
         
     
