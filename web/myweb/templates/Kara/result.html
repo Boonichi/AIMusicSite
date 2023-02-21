@@ -5,7 +5,6 @@
 <head>
 </head>
 <body>
-
     <div class="floating-icon"><a href="" style="color:white"><i class="fab fa-github"></i></a></div>
     <div class="floating-icon"><a href="" style="color:white"><i class="fab fa-codepen"></i></a></div>
     <div id="music-player">
@@ -19,7 +18,7 @@
               <div id="lyrics-content">
               </div>
             </div>
-            <audio id="audioFile" preload="true" src="{% static path %}" type="audio/mpeg">
+            <audio id="audioFile" preload="true" src="{{file}}" type="audio/mpeg">
             </audio>
             <div id="player">
               <div id="bar">
