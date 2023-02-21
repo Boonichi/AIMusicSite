@@ -33,9 +33,7 @@ def run_denoiser(separator, vocal,sample_rate=None,get_vocal_function=None):
     mix = mix.to(device)  # instead of cuda because some computer can't use cuda
     ref = mix.mean(dim=0)  # mono mixture
     mix = (mix - ref.mean()) / ref.std()
-    mix = convert_audio(mix, src_rate, separator.samplerate, separator.audio_channels)
-
-    # Separate
+    mix = convert_audio(mix,sr,separator.samplerate,separator.audio_channels)
     with torch.no_grad():
         estimates = apply_model(separator, mix[None], overlap=0.25)[0]  # defalut 0.25
 
