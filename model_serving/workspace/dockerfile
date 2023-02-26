@@ -1,0 +1,18 @@
+FROM pytorch/torchserve:latest
+
+#COPY my_model/pytorch_model.bin my_model/config.json \
+#    my_tokenizer/preprocessor_config.json my_tokenizer/special_tokens_map.json \
+#    my_tokenizer/tokenizer_config.json my_tokenizer/vocab.json handler.py /home/model_server/
+
+RUN torch-model-archiver --model-name lyric_align \
+  --version 1.0 \
+  --serialized-file my_model/pytorch_model.bin \
+  --handler handler.py \
+  --export-path model_store \
+  --extra-files /my_model/pytorch_model.bin /my_model/config.json \
+    /my_tokenizer/preprocessor_config.json /my_tokenizer/special_tokens_map.json \
+    /my_tokenizer/tokenizer_config.jso /my_tokenizer/vocab.json handler.py
+
+CMD ["torchserve", "--start", "--model-store", "model_store", "--models",  "my_tc=lyric_align.mar"]
+torch-model-archiver --model-name lyric_align --version 1.0 --model-file my_model/pytorch_model.bin --handler handler.py --extra-files "my_model/config.json, my_tokenizer/added_tokens.json, my_tokenizer/preprocessor_config.json, my_tokenizer/special_tokens_map.json, my_tokenizer/tokenizer_config.json, my_tokenizer/vocab.json, demus.py, forced_alignment.py, get_lyric_song.py, lyric_align.py, result_to_json.py, util.py" --export-path model_store
+torchserve --start --model-store model_store --models lyric_align.mar --ncs --ts-config config.properties
