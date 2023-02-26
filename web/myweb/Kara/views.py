@@ -12,20 +12,28 @@ import librosa
 # Create your views here.
 
 class seaching_view(View):
+    
     def get(self,request,*args, **kwargs):
-        form=Uploadfile()
-        return render(request,'Kara/searching.html',{'form':form})
+        
+        return render(request,'Kara/searching.html',{'err':""})
      
     def post(self,request,*args, **kwargs):
+        data={
+            'err':''
+        }
         global song_search
         if('song_name' in request.POST.keys()):
             song_search=request.POST['song_name']
+            return redirect(reverse('Kara:waiting'))
         else:
             song_search=''
             form=Uploadfile(request.POST,request.FILES)
             if(form.is_valid()):
                 file.objects.create(vocal_file = request.FILES['vocal_file'],lyric_file=request.FILES['lyric_file'])
-        return redirect(reverse('Kara:waiting'))
+                return redirect(reverse('Kara:waiting'))
+            else:
+                data['err']=form.non_field_errors().as_text().replace("*",'')
+                return render(request,'Kara/searching.html',data)
 
 
 class waiting_view(View):

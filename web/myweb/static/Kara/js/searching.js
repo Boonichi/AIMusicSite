@@ -15,3 +15,12 @@ $(document).ready(function() {
       }
    });
  });
+
+
+
+$("input:file").change(function (){
+  console.log('hi')
+	fileName = $(this)[0].files[0].name;
+	$('.filename').html(fileName);
+	$('.dropzone .upload').hide();
+});
