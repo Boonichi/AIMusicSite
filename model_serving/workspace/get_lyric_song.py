@@ -30,6 +30,7 @@ driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionI
 params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_dic}}
 command_result = driver.execute("send_command", params)
 
+driver.quit()
 
 def get_lyric(path):
     lyric=[]
@@ -40,12 +41,9 @@ def get_lyric(path):
     return lyric
     
 def get_vocal(path, sr = 44100):
-    path = Path(path).read_bytes()
-    mix=decode(path, nchannels=1, sample_rate = sr, output_format = SampleFormat.SIGNED32)
-    mix = torch.FloatTensor(mix.samples)
-    # Vocal Normalization (32 bits)
-    mix /= (1 << (32 - 1))
-    return mix,sr
+    wav, sr = librosa.load(path, sr = sr)
+
+    return wav,sr
 
 def latest_download_file(path):
     os.chdir(path)

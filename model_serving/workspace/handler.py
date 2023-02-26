@@ -8,13 +8,16 @@ import torchvision
 from torchaudio.io import _stream_reader
 from scipy.io import wavfile
 import soundfile as sf
+import librosa
 
 from ts.torch_handler.base_handler import BaseHandler
 from transformers import Wav2Vec2Processor, Wav2Vec2ForCTC
 
 from lyric_align import Lyrics_to_alignment
 
-from get_lyric_song import get_vocal
+from get_lyric_song import get_vocal, processing_lyric
+
+from result_to_json import convert_to_json_form
 
 
 logger = logging.getLogger(__name__)
@@ -66,33 +69,54 @@ class ModelHandler(BaseHandler):
 
     def preprocess(self, requests):
         samples = []
-        for idx, data in enumerate(requests):           
-            raw_script = data.get('script')
-            script = raw_script.decode("utf-8")
-            
-            logger.info(script)
+        for idx, data in enumerate(requests):
+            sample = dict()
+            raw_lyric = data.get('script')      
+            raw_wav = data.get('data') 
 
-            mix = BytesIO(data['data'])
-            
-            logger.info(mix)
-
-            sr, wav = get_vocal(mix)
+            wav, sr = get_vocal(BytesIO(raw_wav))
+            lyric = raw_lyric.decode("utf-8")
+            lyric , lyric_len = processing_lyric(lyric)
 
             logger.info(wav)
+            logger.info(lyric)
             
-
+            sample["wav"] = wav
+            sample["sr"] = sr
+            sample["lyric"] = lyric
+            sample["lyric_len"] = lyric_len
+        
+            samples.append(sample)
         logger.info("Data Loaded")
-
+        
         return samples
 
-    def inference(self, vocal, sr, lyric, lyric_len):
-        
-        word, trellis_length, vocal = self.lyric_align.predict()
-        
-        logger.info("Prediction Process Done")
-        logger.info("Word Prediction: ", word)
-        return word, trellis_length, vocal, lyric_len
+    def inference(self, inputs):
+        result = []
+        for sample in inputs:
 
-    def postprocess(self, word, trellis_length, vocal, lyric_len):
-        logger.info(word)
-        return word
+            output = dict()
+            self.lyric_align.preprocess(vocal = sample["wav"], sr = sample["sr"], lyric = sample["lyric"])
+            word, trellis_len, vocal = self.lyric_align.predict()
+            
+            output["word"] = word
+            output["trellis_len"] = trellis_len
+            output["vocal"] = vocal
+            output["lyric"] = sample["lyric"]
+            output["lyric_len"] = sample["lyric_len"]
+            output["wav_len"] = len(vocal)
+
+            result.append(output)
+
+        logger.info("Prediction Process Done")
+        return result
+
+    def postprocess(self, inputs):
+        outputs = []
+        for sample in inputs:
+
+
+            output = convert_to_json_form(sample["word"], sample["lyric"], sample["lyric_len"], sample["trellis_len"], sample["wav_len"])
+            outputs += output
+        
+        return outputs
