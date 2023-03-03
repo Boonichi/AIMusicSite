@@ -78,8 +78,8 @@ class ModelHandler(BaseHandler):
             lyric = raw_lyric.decode("utf-8")
             lyric , lyric_len = processing_lyric(lyric)
 
-            logger.info(wav)
-            logger.info(lyric)
+            #logger.info(wav)
+            #logger.info(lyric)
             
             sample["wav"] = wav
             sample["sr"] = sr

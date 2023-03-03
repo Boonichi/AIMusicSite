@@ -13,6 +13,8 @@ from transformers import Wav2Vec2Processor, Wav2Vec2ForCTC
 
 from util import gpu_device
 
+import ts.model_server 
+
 
 def main():
     current_dir = Path(os.getcwd())
