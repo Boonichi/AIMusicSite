@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 import os
 from time import sleep
 from unidecode import unidecode
+import random
 url='https://www.nhaccuatui.com/tim-kiem?q={}'
 download_dic=os.path.join(os.getcwd(),'media','vocal')
 
