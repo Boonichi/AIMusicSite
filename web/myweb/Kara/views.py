@@ -7,6 +7,9 @@ import os
 import json
 from .forms import Uploadfile
 from .get_lyric_song import take_lyric_song,get_vocal,get_lyric
+import requests
+
+
 # Create your views here.
 
 class seaching_view(View):
@@ -33,10 +36,10 @@ class seaching_view(View):
                 data['err']=form.non_field_errors().as_text().replace("*",'')
                 return render(request,'Kara/searching.html',data)
 
-
 class waiting_view(View):
     def get(self,request,*args, **kwargs):
         return render(request,'Kara/waiting.html',{})
+    
     def post(self,request,*args, **kwargs):
         info={}
         global path_song,lyric,song_name,author_name,function_lyric,number
@@ -44,20 +47,19 @@ class waiting_view(View):
             lyric,number,path_song,song_name,author_name=take_lyric_song(song_search)
             function_lyric=None
         else:
-            path_song     =os.path.join(os.getcwd(),'media',str(file.objects.all().order_by('-id')[0].vocal_file))
-            lyric         =os.path.join(os.getcwd(),'media',str(file.objects.all().order_by('-id')[0].lyric_file))
+            song_path     =os.path.join(os.getcwd(),'media',str(file.objects.all().order_by('-id')[0].vocal_file))
+            lyric_path         =os.path.join(os.getcwd(),'media',str(file.objects.all().order_by('-id')[0].lyric_file))
             song_name     ="NULL"
             author_name   ="NULL"
             function_lyric=get_lyric
             number        =None
             
-            
-        word,treils_length,vocal,number,ori_lyric=Lyrics_to_alignment(path_song,lyric,number,get_lyric_function=function_lyric,get_vocal_function=get_vocal).run()
-        output_file=convert_to_json_form(word,ori_lyric,number,converto_time,treils_length,len(vocal),'static/info','result.json')
         
+        lyric_timestamps = request_serving(song_path, lyric_path)
+        print(lyric_timestamps)
         # output_file=convert_to_json_form(0,lyric,number,converto_time,0,0)
         
-        info['lyrics']=output_file
+        info['lyrics']=lyric_timestamps
         info['author_name']=author_name
         info['song_name']=song_name
         with open(os.path.join(os.getcwd(),'static/info/info_file.json'), "w",encoding='utf-8') as outfile:
@@ -86,3 +88,16 @@ class API_JSON(View):
            data1['lyrics']=json.load(file)
        data1=json.dumps(data1) #encode json 
        return JsonResponse({'data':data1}) 
+    
+
+def request_serving(song_path, lyric_path):
+        url = "http://localhost:8080/predictions/lyric_align"
+
+        files = {
+            'data' : open(song_path, "rb"),
+            'script' : open(lyric_path)
+        }
+
+        response = requests.post(url, files = files)
+        
+        return response.json()
