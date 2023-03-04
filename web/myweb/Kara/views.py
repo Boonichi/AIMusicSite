@@ -42,24 +42,44 @@ class waiting_view(View):
     
     def post(self,request,*args, **kwargs):
         info={}
-        global path_song,lyric,song_name,author_name,function_lyric,number
+        global song_path,song_name,author_name,lyric_path
         if(song_search!=''):
-            lyric,number,path_song,song_name,author_name=take_lyric_song(song_search)
-            function_lyric=None
+            lyric,number,song_path,song_name,author_name=take_lyric_song(song_search)
+            
+            lyric_path=os.path.join(os.getcwd(),'media','lyric','searching.txt')
+            
+            with open(lyric_path,'w',encoding='utf-8') as output:
+                current_sentence=0
+                num=0
+                for word in lyric:
+                    output.write(word)
+                    num += 1
+                    if(num<number[current_sentence]['count']):
+                        output.write(" ")
+                    else:
+                        output.write("\n")
+                        current_sentence+=1
+                        num=0
         else:
             song_path     =os.path.join(os.getcwd(),'media',str(file.objects.all().order_by('-id')[0].vocal_file))
             lyric_path         =os.path.join(os.getcwd(),'media',str(file.objects.all().order_by('-id')[0].lyric_file))
             song_name     ="NULL"
             author_name   ="NULL"
-            function_lyric=get_lyric
-            number        =None
             
         
         lyric_timestamps = request_serving(song_path, lyric_path)
-        print(lyric_timestamps)
+        
+        folder=os.path.join(os.getcwd(),'static/info')
+        path=os.path.join(os.getcwd(),'static/info','result.json')
+        
+        if(not os.path.exists(folder)):
+            os.makedirs(folder)
+            
+        with open(path, "w",encoding='utf-8') as outfile:
+            json.dump(lyric_timestamps, outfile,ensure_ascii=False)
         # output_file=convert_to_json_form(0,lyric,number,converto_time,0,0)
         
-        info['lyrics']=lyric_timestamps
+        info['lyrics']=path
         info['author_name']=author_name
         info['song_name']=song_name
         with open(os.path.join(os.getcwd(),'static/info/info_file.json'), "w",encoding='utf-8') as outfile:
@@ -72,7 +92,7 @@ class result_view(View):
         global path
 
         if(song_search!=''):
-            path   =path_song.split(os.path.sep)
+            path   =song_path.split(os.path.sep)
             path   =os.path.join(path[-2],path[-1])
             path   =os.path.join('http://127.0.0.1:8000/','media',path)
         else:
