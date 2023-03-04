@@ -1,5 +1,3 @@
-
-
 nav {
   position: absolute;
   z-index: 9999;
@@ -84,6 +82,7 @@ h1 {
   padding: .3em;
   font-size: 3em;
   font-weight: lighter;
+  color: #fff;
 }
 
 .content-wrapper {
@@ -106,13 +105,9 @@ h1 {
 
 
 
-
 .wrap{
-  width: 50%;
+  width:50%;
   position: relative;
-  top: 50px;
-  left: 53%;
-  transform: translate(-50%, -50%);
 }
 
 .input {
@@ -134,12 +129,13 @@ body {
   padding: 0;
   background-color: #212121;
   color: white;
-
+  font-family: "Lucida Console", "Courier New", monospace;
 }
 .search {
   width: 100%;
   position: relative;
   display: flex;
+  padding-left:53%
 }
 
 button {
@@ -239,14 +235,34 @@ span:nth-child(2) {
  transition-delay: none;
 }
 
+.searching_bar{
+  position: relative;
+  width: 100%;
+  height: 10%;
+  top: 20%;
+  bottom: 10%;
+}
 
+ .uploading_bar{
+  position: relative;
+  width: 100%;
+  height: 80%;
+  bottom: 5%;
+}
+.uploading{
+  position:relative;
+  width: 100%;
+  padding-left:30%;
+  padding-top:5%;
+ 
+}
 
 
 
 
 
 .footer-section {
-  top:100px;
+  top:35%;
   position: relative;
   box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
   background-color: #0f1128;
@@ -310,3 +326,76 @@ span:nth-child(2) {
   color: #001eff;
 }
 
+
+
+
+
+.frame {
+position: relative; 
+width: 40%;
+height: 40%;
+overflow: hidden;
+background: #212121;
+color: #212121;
+}
+
+.center {
+position:relative;
+top: 50%;
+left: 50%;
+height: 80%;
+width: 80%;
+transform: translate(-50%, -50%);
+border-radius: 3px;
+box-shadow: 8px 10px 15px 0 rgba(0, 0, 0, 0.2);
+background: #fff;
+display: flex;
+align-items: center;
+justify-content: space-evenly;
+flex-direction: column;
+}
+
+
+h1 {
+font-size: 16px;
+font-weight: 300;
+color:#212121;
+}
+
+.dropzone {
+width: 50%;
+height: 50%;
+border: 1px dashed #999;
+border-radius: 3px;
+text-align: center;
+}
+
+.upload-icon {
+margin: 25px 2px 2px 2px;
+}
+
+.upload-input {
+position: relative;
+top: -62px;
+left: 0;
+width: 100%;
+height: 100%;
+opacity: 0;
+}
+
+.break_line{
+position: relative;
+top:10%;
+width: 100%;
+text-align: center;
+line-height: 0.1em;
+border-bottom: 1px solid #000; 
+margin: 10px 0 20px;
+
+}
+
+.break_line div{
+background:#fff; 
+padding:0 10px;
+font-size: 100px;
+}

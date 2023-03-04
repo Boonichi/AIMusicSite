@@ -27,20 +27,83 @@
       
         <p>This is just for demo model and we will continue develop it in future so hope you enjoys it.</p>
     </div>
-      <form action="." method='POST'>{% csrf_token %}
-        <div class="wrap">
-            <div class="search">
-                <input type="text" name="song_name" class="input" placeholder="Type something here....">
-                <button type="submit">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span> Search
-                </button>
-              
+
+    <div class='uploading_bar'>
+        <form action="." method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <div class="uploading_wrap">
+                <div class="uploading">
+                    <p>{{err}}</p>
+                    {% comment %} <p>
+                            <label for="id_lyric_file">Lyric file:</label>
+                            <input type="file" name="lyric_file" required id="id_lyric_file">
+                    </p>  {% endcomment %}
+                        
+                    <div class="frame">
+                        <div class="center">
+                            <div class="title">
+                                <h1>Drop lyric_file to upload</h1>
+                            </div>
+                    
+                            <div class="dropzone dropzone_lyric">
+                                <img src="http://100dayscss.com/codepen/upload.svg" class="upload-icon upload_lyric" />
+                                <span class="filename_lyric"></span>
+                                <input type="file" class="upload-input lyric" name="lyric_file"/>
+                            </div>
+                    
+                        </div>
+                    </div>
+
+
+                    <div class="frame">
+                        <div class="center">
+                            <div class="title">
+                                <h1>Drop vocal_file to upload</h1>
+                            </div>
+                    
+                            <div class="dropzone dropzone_vocal">
+                                <img src="http://100dayscss.com/codepen/upload.svg" class="upload-icon upload_vocal" />
+                                <span class="filename_vocal"l></span>
+                                <input type="file" class="upload-input vocal" name="vocal_file"/>
+                            </div>
+                    
+                        </div>
+                    </div> 
+                    <button type="submit" style="left:15%; width:10%" >
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span> UPLOAD
+                    </button>
+    
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
+
+    
+    <div class="break_line">
+        <div>OR</div>
+    </div>
+
+
+
+
+
+    <div class='searching_bar'>
+        <form action="." method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <div class="wrap">
+                <div class="search">
+                    <input type="text" name="song_name" class="input" placeholder="Type something here...."> </br>
+                    <button type="submit" value='text'>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 
 
     <section class='footer-section'>
@@ -72,7 +135,3 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="{% static 'Kara/js/searching.js' %}"></script> 
 </html>
-
-
-
-

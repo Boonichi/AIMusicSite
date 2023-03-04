@@ -5,7 +5,6 @@
 <head>
 </head>
 <body>
-
     <div class="floating-icon"><a href="" style="color:white"><i class="fab fa-github"></i></a></div>
     <div class="floating-icon"><a href="" style="color:white"><i class="fab fa-codepen"></i></a></div>
     <div id="music-player">
@@ -19,7 +18,7 @@
               <div id="lyrics-content">
               </div>
             </div>
-            <audio id="audioFile" preload="true" src="{% static path %}" type="audio/mpeg">
+            <audio id="audioFile" preload="true" src="{{file}}" type="audio/mpeg">
             </audio>
             <div id="player">
               <div id="bar">
@@ -54,7 +53,7 @@
 
 <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
 <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="{% static 'Kara/css/result.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'Kara/css/test.css' %}" type="text/css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="{% static 'Kara/js/result.js' %}"></script>
 

@@ -7,11 +7,16 @@ var V = audio.volume;
 var result;
 var totalTime = parseInt(audio.duration * 1000);
 var timeList = [];
+var timeStemp=[];
 var safeKill = 0;
 var counter = 0;
 var time = 0;
 var previousTime;
 var repeat_time=0;
+var words_sentence=[];
+var index=0;
+var index_sentence=1;
+var current_sentence=0;
 function processTime(a) {
   var b = parseInt(a / 60000);
   var c = parseInt((a % 60000) / 1000);
@@ -50,16 +55,25 @@ function setSongName(songName){
   }
 };
 
-function processing(data) {
+function setup(data){
   setArtistName(data.author_name);
   setSongName(data.song_name);
   var html = "";
   timeList = [];
   for (var i = 0; i < data.lyrics.length; i++) {
     timeList.push(data.lyrics[i].s);
-    html = html + "<h2>" + data.lyrics[i].sentence + "</h2>";
+    html = html + "<h2>"
+    temp="";
+    words_sentence.push(data.lyrics[i].w.length);
+    for (var j=0; j< data.lyrics[i].w.length;j++){
+        timeStemp.push(data.lyrics[i].w[j].s);
+        temp=temp+ "<div>" + data.lyrics[i].w[j].d + "</div>";
+    }
+    html = html + temp + "</h2>";
   }
   $("#lyrics-content").html(html);
+}
+function processing(data) {
   $("#totalTime").html(processTime(totalTime));
   $("#currentTime").html(processTime(time));
   var percent = (time / totalTime) * 100;
@@ -111,6 +125,11 @@ function playSong(){
 function reset() {
   time = 0;
   audio.currentTime = 0;
+  $("#lyrics-content div").removeClass("hightlight_lyric");
+  index=0;
+  index_sentence=1;
+  current_sentence=0;
+
 }
 
 function previous() {
@@ -151,7 +170,7 @@ function updateTimer(data) {
   }
   //update timer
   if (play == 1) {
-    time = time + 1000;
+    time = time + 250;
   } else if (play == -1) {
     time = 0;
   }
@@ -163,7 +182,6 @@ function updateTimer(data) {
     $("#progress").css("width", percent + "%");
   } else {
     time = parseInt(audio.currentTime * 1000);
-    // if (time > 100) time = time - 100;
   }
   safeKill = 0;
   while (true) {
@@ -192,6 +210,7 @@ function updateTimer(data) {
         break;
       }
   }
+  hightligh();
 }
 
 $("#progress-bar").on("mousedown", function () {
@@ -222,6 +241,32 @@ function getCookie(name) {
   return cookieValue;
 }
 
+// function hightligh_pre(){
+//   while(time<timeStemp[index]){
+//     $(`#lyrics-content .current div:nth-child(${index_sentence})`).addClass("hightlight_lyric")
+//     if(index>0){
+//       index-=1;
+//     }
+//     if(index_sentence>1){
+//       index_sentence-=1;
+//     }else if(current_sentence>0){
+//       index_sentence=words_sentence[current_sentence]
+//     }
+//   }
+// }
+function hightligh(){
+  $(`#lyrics-content .current div:nth-child(${index_sentence})`).addClass("hightlight_lyric")
+  if(time>timeStemp[index]){
+      if(index<timeStemp.length){
+        index+=1;
+      }
+      index_sentence+=1;
+      if(index_sentence>words_sentence[current_sentence]){
+        index_sentence=1
+        current_sentence+=1;
+      }
+  }
+}
 const csrftoken = getCookie('csrftoken');
 
 async function main(){
@@ -237,14 +282,14 @@ async function main(){
       });
       res= await response.json();
       result=JSON.parse(res.data);
+      setup(result)
       processing(result)
-  }catch(e){
+  }catch(e){ 
       console.log(e)
   }
 };
 
 main()
-
 $("#up").on("click",function(){
     if(V<1){
         V +=0.1;
@@ -276,5 +321,4 @@ button.addEventListener('click',event => {
 
 stopTimer = setInterval(function () {
   updateTimer(result);
-}, 1000);
-
+}, 250);
