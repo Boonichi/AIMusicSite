@@ -94,9 +94,9 @@ class result_view(View):
         if(song_search!=''):
             path   =song_path.split(os.path.sep)
             path   =os.path.join(path[-2],path[-1])
-            path   =os.path.join('http://127.0.0.1:8000/','media',path)
+            path   =path
         else:
-            path   =os.path.join('http://127.0.0.1:8000/','media',str(file.objects.all().order_by('-id')[0].vocal_file))
+            path   =str(file.objects.all().order_by('-id')[0].vocal_file)
         return render(request,'Kara/result.html',{'file':path})
     
 class API_JSON(View):
