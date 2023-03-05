@@ -1,4 +1,4 @@
-const url = 'http://127.0.0.1:8000/Kara/api/getjson/'
+const url = 'http://146.190.99.213:8000/Kara/api/getjson/'
 
 var play=0;
 var audio = document.getElementById("audioFile");
