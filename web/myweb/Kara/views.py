@@ -6,7 +6,7 @@ from .models import file
 import os
 import json
 from .forms import Uploadfile
-from .get_lyric_song import take_lyric_song,get_vocal,get_lyric
+from .get_lyric_song import take_lyric_song
 import requests
 
 
@@ -77,7 +77,6 @@ class waiting_view(View):
             
         with open(path, "w",encoding='utf-8') as outfile:
             json.dump(lyric_timestamps, outfile,ensure_ascii=False)
-        # output_file=convert_to_json_form(0,lyric,number,converto_time,0,0)
         
         info['lyrics']=path
         info['author_name']=author_name

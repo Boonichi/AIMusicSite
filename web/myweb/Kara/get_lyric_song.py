@@ -1,4 +1,3 @@
-import torchaudio
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -25,29 +24,6 @@ driver = webdriver.Chrome(options=chrome_options)
 driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
 params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_dic}}
 command_result = driver.execute("send_command", params)
-
-
-def get_vocal(vocal):
-    mix, sr = torchaudio.load(str(vocal))
-    return mix,sr
-
-def get_lyric(lyric):
-    file=open(lyric,'r+',encoding="utf8")
-    data=file.readlines()
-    file.close()
-    correct_lyric=[]
-    number_sentence_word_per_sentence=[]
-    index=0
-    for line in data:
-        line=line.replace('\n','')
-        number_sentence_word_per_sentence.append({})
-        count=0
-        for element in line.split(' '):
-            correct_lyric.append(element)
-            count += 1
-        number_sentence_word_per_sentence[index]['count']=count
-        index += 1
-    return correct_lyric,number_sentence_word_per_sentence        
 
 def latest_download_file(path):
       list_dir=[os.path.join(path,file_name) for file_name in os.listdir(path)]
