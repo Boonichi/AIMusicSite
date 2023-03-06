@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.views.static import serve
 
 urlpatterns = [
-    path('Kara/',include('Kara.urls')),
+    path('',include('Kara.urls')),
     
     path('admin/', admin.site.urls),
     
