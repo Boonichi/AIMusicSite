@@ -1,4 +1,4 @@
-const url = 'http://146.190.99.213:8000/Kara/waiting/'
+const url = 'http://146.190.99.213:8000/waiting/'
 data={}
 function getCookie(name) {
   let cookieValue = null;
